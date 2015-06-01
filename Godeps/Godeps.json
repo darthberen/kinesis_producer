@@ -1,0 +1,62 @@
+{
+	"ImportPath": "github.com/suicidejack/kinesis_producer",
+	"GoVersion": "go1.4.2",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.2",
+			"Rev": "98a1428efc3d732f9e377b50c8e2113e070896cf"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/aws",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/apierr",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/endpoints",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/protocol/json/jsonutil",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/protocol/jsonrpc",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/protocol/rest",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/internal/signer/v4",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/awslabs/aws-sdk-go/service/kinesis",
+			"Rev": "29717a72a2fc649e790ce97dc2c4d96e32950844"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Rev": "dab07ac62d4905d3e48d17dc549c684ac3b7c15a"
+		},
+		{
+			"ImportPath": "github.com/suicidejack/goprimitives",
+			"Rev": "b54f496eb86c943bbe99f7768a82f1b63bf2d257"
+		},
+		{
+			"ImportPath": "github.com/suicidejack/throttled",
+			"Rev": "373909e862a27e2190015918229c2605b3221f1d"
+		},
+		{
+			"ImportPath": "github.com/vaughan0/go-ini",
+			"Rev": "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1"
+		}
+	]
+}
