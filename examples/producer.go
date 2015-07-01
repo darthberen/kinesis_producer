@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -11,9 +12,8 @@ import (
 )
 
 var (
-	streamName string
-	sendTotal  int
-
+	streamName       string
+	sendTotal        int
 	bufferSize       int
 	verbose          bool
 	flushFreq        *goprimitives.Duration
@@ -23,6 +23,9 @@ var (
 	maxOpenRequests  int
 	maxMessageBytes  int
 	maxRetries       int
+	totalErrors      int
+	totalSuccesses   int
+	sendDelay        *goprimitives.Duration
 )
 
 func init() {
@@ -37,6 +40,7 @@ func init() {
 	flag.IntVar(&maxOpenRequests, "max-open-requests", 10, "maximum amount of requests that be open to a single kinesis stream")
 	flag.IntVar(&maxMessageBytes, "max-message-bytes", 50000, "maximum amount of bytes for a single kinesis record")
 	flag.IntVar(&maxRetries, "max-retries", 1, "maximum amount of times to attemp resending a request to kinesis")
+	flag.Var(sendDelay, "send-delay", "the delay between the sending of each message")
 }
 
 func main() {
@@ -70,29 +74,50 @@ func main() {
 		return
 	}
 
+	// watch the success and error channels in their own goroutines
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for err := range streamProducer.Errors() {
+			err.Log("received error to handle")
+			//showAWSErrorType(err.AWSError)
+			totalErrors++
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for range streamProducer.Successes() {
+			//msg.Log("this message was a success!")
+			totalSuccesses++
+		}
+	}()
+
 	log.WithFields(log.Fields{
 		"stream":    streamName,
 		"sendTotal": sendTotal,
 	}).Info("sending messages to kinesis")
 
-	time.Sleep(3000 * time.Millisecond)
 	for i := 0; i < sendTotal; i++ {
 		streamProducer.Input() <- &producer.KinesisMessage{
 			Data:         []byte(fmt.Sprintf("data record %d", i)),
 			Stream:       streamName,
 			PartitionKey: fmt.Sprintf("%d", i),
 		}
+		time.Sleep(10 * time.Millisecond)
 	}
 
-	for {
-		select {
-		case <-streamProducer.Successes():
-			log.Debug("got a success message")
-		case kinesisError := <-streamProducer.Errors():
-			kinesisError.Log("received an error")
-		}
-	}
+	log.Info("closing the producer")
+	streamProducer.Close()
 
-	time.Sleep(10000 * time.Millisecond)
-	//streamProducer.Close()
+	// make sure that the error and success channels are closed
+	log.Info("waiting to consume remaining success/error messages")
+	wg.Wait()
+
+	log.WithFields(log.Fields{
+		"sendTotal":      sendTotal,
+		"stream":         streamName,
+		"totalSuccesses": totalSuccesses,
+		"totalErrors":    totalErrors,
+	}).Info("final results")
 }
