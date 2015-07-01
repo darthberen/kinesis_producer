@@ -89,6 +89,30 @@ type KinesisProducerConfig struct {
 	AckSuccess bool `json:"AckSuccesses"`
 }
 
+func (c KinesisProducerConfig) String() string {
+	return fmt.Sprintf("FlushFrequency: %s, ",
+		"FlushBytes: %d, ",
+		"FlushMessages: %d, ",
+		"FlushMaxMessages: %d, ",
+		"MaxOpenRequests: %d, ",
+		"MaxMessageBytes: %d, ",
+		"AWSDebugMode: %t, ",
+		"MaxRetries: %d, ",
+		"BufferSize: %d, "+
+			"AckSuccess: %t",
+		c.FlushFrequency,
+		c.FlushBytes,
+		c.FlushMessages,
+		c.FlushMaxMessages,
+		c.MaxOpenRequests,
+		c.MaxMessageBytes,
+		c.AWSDebugMode,
+		c.MaxRetries,
+		c.BufferSize,
+		c.AckSuccess,
+	)
+}
+
 // NewKinesisStreamManager creates a new kinesis manager. It handles:
 // batching messages
 func NewKinesisStreamManager(opts *KinesisProducerConfig) (manager *KinesisStreamManager) {
