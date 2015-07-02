@@ -90,16 +90,16 @@ type KinesisProducerConfig struct {
 }
 
 func (c KinesisProducerConfig) String() string {
-	return fmt.Sprintf("FlushFrequency: %s, ",
-		"FlushBytes: %d, ",
-		"FlushMessages: %d, ",
-		"FlushMaxMessages: %d, ",
-		"MaxOpenRequests: %d, ",
-		"MaxMessageBytes: %d, ",
-		"AWSDebugMode: %t, ",
-		"MaxRetries: %d, ",
+	return fmt.Sprintf("FlushFrequency: %s, "+
+		"FlushBytes: %d, "+
+		"FlushMessages: %d, "+
+		"FlushMaxMessages: %d, "+
+		"MaxOpenRequests: %d, "+
+		"MaxMessageBytes: %d, "+
+		"AWSDebugMode: %t, "+
+		"MaxRetries: %d, "+
 		"BufferSize: %d, "+
-			"AckSuccess: %t",
+		"AckSuccess: %t",
 		c.FlushFrequency,
 		c.FlushBytes,
 		c.FlushMessages,
